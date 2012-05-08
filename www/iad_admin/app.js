@@ -592,13 +592,17 @@ function imagesTabHandler() {
 	});
 	
 	imagesGrid.down('#deleteRow').items[0].handler = function(grid, rowIndex, colIndex) {
-        var record = grid.getStore().getAt(rowIndex);
-		adminAPI({
-			data: {'do': 'deleteImage', imageId: record.get('imageId')},
-			ok: function(reqdata, data) {
-				grid.getStore().remove(record);
-			},
-			loadMsg: _('Deleting image')
+		Ext.Msg.confirm(_('Confirm deleting'), _('Are you sure?'), function(answer, name) {
+			if(answer == 'yes') {
+				var record = grid.getStore().getAt(rowIndex);
+				adminAPI({
+					data: {'do': 'deleteImage', imageId: record.get('imageId')},
+					ok: function(reqdata, data) {
+						grid.getStore().remove(record);
+					},
+					loadMsg: _('Deleting image')
+				});
+			};
 		});
 	};
 	
